@@ -1,127 +1,163 @@
-#include<bits/stdc++.h>
+#include <iostream>
 using namespace std;
 
 template <typename T>
-class ll{
-
-    private:
-    struct Node{
+class LinkedList {
+private:
+    struct Node {
         T data;
         Node* next;
-
-        Node(const T &val):data(val),next(nullptr){}
+        Node(const T& val) : data(val), next(nullptr) {}
     };
+
     Node* head;
+    Node* tail;
+    size_t sz;
 
-    public:
-        ll(){
-            head = nullptr; 
+public:
+    // Constructor
+    LinkedList() : head(nullptr), tail(nullptr), sz(0) {}
+
+    // Destructor
+    ~LinkedList() {
+        clear();
+    }
+
+    // Disable copy (important for now)
+    LinkedList(const LinkedList&) = delete;
+    LinkedList& operator=(const LinkedList&) = delete;
+
+    // Basic utilities
+    bool isEmpty() const {
+        return sz == 0;
+    }
+
+    size_t size() const {
+        return sz;
+    }
+
+    void clear() {
+        Node* curr = head;
+        while (curr) {
+            Node* temp = curr;
+            curr = curr->next;
+            delete temp;
         }
-        ~ll(){
+        head = tail = nullptr;
+        sz = 0;
+    }
+
+    // Insert at front
+    void insertFront(const T& val) {
+        Node* node = new Node(val);
+        node->next = head;
+        head = node;
+
+        if (!tail) tail = node;
+        sz++;
+    }
+
+    // Insert at back (O(1))
+    void insertBack(const T& val) {
+        Node* node = new Node(val);
+
+        if (!head) {
+            head = tail = node;
+        } else {
+            tail->next = node;
+            tail = node;
+        }
+        sz++;
+    }
+
+    // Insert at position (0-based)
+    void insertAt(size_t pos, const T& val) {
+        if (pos > sz) throw out_of_range("Invalid position");
+
+        if (pos == 0) {
+            insertFront(val);
+            return;
+        }
+
+        if (pos == sz) {
+            insertBack(val);
+            return;
+        }
+
+        Node* curr = head;
+        for (size_t i = 0; i < pos - 1; i++) {
+            curr = curr->next;
+        }
+
+        Node* node = new Node(val);
+        node->next = curr->next;
+        curr->next = node;
+        sz++;
+    }
+
+    // Delete first occurrence
+    void deleteValue(const T& val) {
+        if (!head) return;
+
+        if (head->data == val) {
             Node* temp = head;
-            while(temp){
-                Node* deleten = temp;
-                temp = temp->next;
-                delete deleten;
-            }
+            head = head->next;
+            delete temp;
+            sz--;
+
+            if (!head) tail = nullptr;
+            return;
         }
-        void insertfirst(const T &val){
-            Node* newnode = new Node(val);
-            newnode->next = head;
-            head = newnode;
-        }
-        void insertback(const T &val){
-            Node* newnode = new Node(val);
-            if(!head){
-                head = newnode;
+
+        Node* curr = head;
+        while (curr->next) {
+            if (curr->next->data == val) {
+                Node* temp = curr->next;
+                curr->next = temp->next;
+
+                if (temp == tail) tail = curr;
+
+                delete temp;
+                sz--;
                 return;
             }
-            Node* temp = head;
-            while(temp->next){
-                temp=temp->next;
-            }
-            temp->next = newnode;
+            curr = curr->next;
         }
-        void insertatpos(int pos,T &val){
-            if(pos<=0 || !head){
-                insertfirst(val);
-                return;
-            }
-            int x=0;
-            Node* temp = head;
-            while(temp->next && x<pos-1){
-                temp = temp->next;
-                x++;
-            }
-            Node* newnode = new Node(val);
-            newnode->next = temp->next;
-            temp->next = newnode;
+    }
+
+    // Search
+    bool contains(const T& val) const {
+        Node* curr = head;
+        while (curr) {
+            if (curr->data == val) return true;
+            curr = curr->next;
         }
-        void printll(){
-            Node* temp = head;
-            while(temp){
-                cout<<temp->data<<endl;
-                temp = temp->next;
-            }
+        return false;
+    }
+
+    // Reverse
+    void reverse() {
+        Node* prev = nullptr;
+        Node* curr = head;
+        tail = head;
+
+        while (curr) {
+            Node* next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
         }
-        void findmid(){
-            if(!head){return;}
-            Node* fast = head;
-            Node* slow = head;
-            while(fast->next && fast->next->next){
-                fast = fast->next->next;
-                slow = slow->next;
-            }
-            cout<<"Middle : "<<slow->data<<endl;
+
+        head = prev;
+    }
+
+    // Print
+    void print() const {
+        Node* curr = head;
+        while (curr) {
+            cout << curr->data << " -> ";
+            curr = curr->next;
         }
-        void deleteval(const T&val){
-            if(!head){return;}
-            if(head->data==val){
-                Node* temp1 = head->next;
-                delete head;
-                head = temp1;
-                return;
-            }
-            Node* temp = head;
-            while(temp->next){
-                Node* check = temp->next;
-                if(check->data==val){
-                    temp->next = check->next;
-                    delete check;
-                    return;
-                }
-                else
-                    temp = temp->next;
-            }
-        }
-        void reverse(){
-            Node* curr=head;
-            Node* prev = nullptr;
-            Node* next = nullptr;
-            while(curr){
-                next=curr->next;
-                curr->next=prev;
-                prev=curr;
-                curr=next;
-            }
-            head = prev;
-        }
+        cout << "NULL\n";
+    }
 };
-
-int main(){
-    ll<int> l1;
-    l1.insertfirst(6);
-    l1.insertfirst(7);
-    l1.insertfirst(8);
-    l1.insertback(9);
-    l1.insertback(10);
-    l1.insertback(11);
-    l1.insertback(12);
-    l1.printll();
-    l1.findmid();
-    cout<<"After Delete"<<endl;
-    l1.deleteval(9);
-    l1.printll();
-    cout<<"After reverse"<<endl;
-    l1.reverse();
-}
