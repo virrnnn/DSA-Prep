@@ -160,4 +160,33 @@ public:
         }
         cout << "NULL\n";
     }
+    //sort zero and one in linked list Added
+    Node* SortZeroOne(Node* l1){
+        Node zerohead(-1);
+        Node onehead(-1);
+
+        Node* zero = &zerohead;
+        Node* one = &onehead;
+
+        Node* curr = l1;
+        while(curr){
+            if(curr->data == 0){
+                zero->next = curr;
+                zero = zero->next;
+            }
+            else{
+                one->next = curr;
+                one = one->next; 
+            }
+            curr = curr->next;
+        }
+        zero->next = onehead.next;
+        one->next = nullptr;
+        return zerohead.next;
+    }
 };
+
+
+int main(){
+    
+}
