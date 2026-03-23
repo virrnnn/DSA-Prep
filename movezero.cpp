@@ -1,6 +1,6 @@
 #include<bits/stdc++.h>
 using namespace std;
-
+// MOVE Zeros
 void movezero(vector <int>a,int n){
     int zeroidx = 0;
     for(int i=0;i<n;i++){
