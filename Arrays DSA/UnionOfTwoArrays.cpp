@@ -13,41 +13,55 @@ set<int> Brute(vector<int>&a,vector<int>&b){
     return Uset;
 }
 
-vector<int> Opt(vector<int>&a,vector<int>&b){
+vector<int> UnionOfTwoArr(vector<int>&a,vector<int>&b){
     int i=0,j=0;
     vector<int>v;
-    while(i<a.size() && j<b.size()){
-        if(a[i]<=b[j]){
-            if(v.back()!=a[i]){
+    while(i<a.size() && j<b.size())
+    {
+        if(a[i]<b[j])
+        {
+            if(v.empty() || v.back()!=a[i] )
+            {
                 v.push_back(a[i]);
             }
             i++;
         }
-        else{
-            if(v.back()!=b[j]){
+        else if(b[j]<a[i]){
+            if(v.empty() || v.back()!=b[j])
+            {
                 v.push_back(b[j]);
             }
             j++;
         }
+        else { // equal case
+            if (v.empty() || v.back() != a[i])
+                v.push_back(a[i]);
+            i++;
+            j++;
+        }
     }
     while(i<a.size()){
-        if(v.back()!=a[i]){
+        if(v.empty() || v.back()!=a[i])
+        {
             v.push_back(a[i]);
         }
-        j++;
+        i++;
     }
-    while(i<b.size()){
-        if(v.back()!=b[j]){
+    while(j<b.size())
+    {
+        if(v.empty() || v.back()!=b[j])
+        {
             v.push_back(b[j]);
         }
         j++;
     }
+    return v;
 }
 int main(){
     vector<int> a = {0,0,1,1,1};
-    vector<int> b = {0,2,3,4,4};
+    vector<int> b = {0,2,3,4,4,5,5,5};
     
-    for(auto it:Opt(a,b)){
+    for(auto it:UnionOfTwoArr(a,b)){
         cout<<it<<endl;
     }
 }
