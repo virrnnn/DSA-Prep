@@ -30,7 +30,7 @@ int FindMissingNumberBS(vector<int>&a){  //ONLY IF SORTED
             high = mid-1;
         }
     }
-    return low+1;
+    return low+1; 
 }
 
 int main(){
