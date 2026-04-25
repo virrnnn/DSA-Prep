@@ -28,11 +28,12 @@ void Bubble(vector<int> &v){
     }
 }
 //INSERTION SORT
-void Insertion(vector<int>& v){
-    for(int i=0;i<=v.size()-1;i++){
-        int j = i;
-        while(j>0 && v[j-1]>v[j]){
-            swap(v[j],v[j-1]);
+void Insertion(vector<int>& a){
+    int n = a.size();
+    for(int i=1;i<n;i++){
+        int j=i;
+        while(j>0 && a[j]<a[j-1]){
+            swap(a[j],a[j-1]);
             j--;
         }
     }
